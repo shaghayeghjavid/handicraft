@@ -6,7 +6,7 @@
 	<meta name="description" content="">
 	<meta name="author" content="">
     
-    <title>ATLAS - HTML5 Website Template</title>
+    <title>ATLAS</title>
 	<!-- Bootstrap -->
     <link rel="stylesheet" href="css/bootstrap.css">
     <!-- end Google Font -->
@@ -24,12 +24,6 @@
     <!-- Main Stylesheet CSS -->
     <link rel="stylesheet" href="css/style.css">
     
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-	<!--[if lt IE 9]>
-	  <script src="js/html5shiv.js"></script>
-	  <script src="js/respond.min.js"></script>
-	<![endif]-->
-
 	<!-- SLIDER REVOLUTION 4.x CSS SETTINGS -->
 	<link rel="stylesheet" type="text/css" href="css/settings.css" media="screen" />
 
@@ -61,7 +55,7 @@
                         <li><a data-scroll href="#team" class="int-collapse-menu">Team</a></li>
                         <li><a data-scroll href="#works" class="int-collapse-menu">Portfolio</a></li>
 						<li><a data-scroll href="#contact" class="int-collapse-menu">Contact</a></li>
-                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="{{route('artists')}}">Artists</a></li>
                         </ul>
                     </div><!--/.nav-collapse -->
                 </div><!--/.container-fluid -->
@@ -555,7 +549,7 @@
                 </div>
             </div> <!-- end row 2 -->
                    
-    <!-- TESTIMONIAL SECTION -->              
+            <!-- TESTIMONIAL SECTION -->              
             <div class="testimonial text-center">
                 <h2 class="three" data-scroll-reveal="enter from the bottom after 0.2s">And What They Say</h2>
             </div><!-- end title -->
@@ -719,7 +713,6 @@
 									<span><a data-toggle="tooltip" data-placement="bottom" title="" href="#" data-original-title="Facebook"><i class="fa fa-facebook"></i></a></span>
 									<span><a data-toggle="tooltip" data-placement="bottom" title="" href="#" data-original-title="Google Plus"><i class="fa fa-google-plus"></i></a></span>
 									<span><a data-toggle="tooltip" data-placement="bottom" title="" href="#" data-original-title="Twitter"><i class="fa fa-twitter"></i></a></span>
-									<span><a data-toggle="tooltip" data-placement="bottom" title="" href="#" data-original-title="Youtube"><i class="fa fa-youtube"></i></a></span>
 									<span><a data-toggle="tooltip" data-placement="bottom" title="" href="#" data-original-title="Linkedin"><i class="fa fa-linkedin"></i></a></span>
 									<span><a data-toggle="tooltip" data-placement="bottom" title="" href="#" data-original-title="Dribbble"><i class="fa fa-dribbble"></i></a></span>
 								</div>
@@ -995,27 +988,16 @@
     <section id="footer" class="footer-wrapper text-center">
         <div class="container">
             <div class="title text-center" data-scroll-reveal="enter from the bottom after 0.5s">
-               <div class="aligncenter">     
-				  <a href="index.html" class="navbar-brand">ATLAS <br> <span class="slogo">CREATIVE <span></a>
-                 
-                    <div class="socialFooter">
-                        <a href="#"><i class="fa fa-facebook"></i></a>
-                        <a href="#"><i class="fa fa-twitter"></i></a>
-                
-                        <a href="#"><i class="fa fa-linkedin"></i></a>
-                       
-                        <a href="#"><i class="fa fa-flickr"></i></a>
-                        <a href="#"><i class="fa fa-pinterest"></i></a>
-                       
-                        <a href="#"><i class="fa fa-youtube"></i></a>
-                    
-                    </div>
-               		<!-- don't removed this as we are providing it for free -->
-    	<p>Designed by © 2015 <a href="http://www.createwebsite.net">Create Website</a></p>
+            <div class="aligncenter">     
+                <a href="index.html" class="navbar-brand">ATLAS</a>
+                <p>All rights reserved by Atlas. Any copy of this site
+                    It is illegal.</p>
+                <p>Designed in 2019</p>
                 <a data-scroll-reveal="enter from the bottom after 0.3s" href="#home"><i class="fa fa-angle-up"></i></a>
             </div>    <!-- end title -->
         </div>  <!-- end container -->
     </section><!--/ Footer  End --> 
+     
      
     <!-- SECTION CLOSED -->
      
@@ -1095,33 +1077,33 @@
 	</script>
 
     <!-- SLIDER REVOLUTION 4.x SCRIPTS  -->
-        <script type="text/javascript" src="js/jquery.themepunch.plugins.min.js"></script>
-        <script type="text/javascript" src="js/jquery.themepunch.revolution.min.js"></script>
+    <script type="text/javascript" src="js/jquery.themepunch.plugins.min.js"></script>
+    <script type="text/javascript" src="js/jquery.themepunch.revolution.min.js"></script>
         
-		<script type="text/javascript">
-			var revapi;
-			jQuery(document).ready(function() {
-			revapi = jQuery('.tp-banner').revolution(
-			{
-				delay:9000,
-				startwidth:1170,
-				startheight:500,
-				hideThumbs:10,
-				fullWidth:"off",
-				fullScreen:"on",
-				fullScreenOffsetContainer: ""
-			 });
-		   });	//ready
-		</script>
+    <script type="text/javascript">
+        var revapi;
+        jQuery(document).ready(function() {
+        revapi = jQuery('.tp-banner').revolution(
+        {
+            delay:9000,
+            startwidth:1170,
+            startheight:500,
+            hideThumbs:10,
+            fullWidth:"off",
+            fullScreen:"on",
+            fullScreenOffsetContainer: ""
+            });
+        });	//ready
+    </script>
 		
 		
     
     <!-- Animation Scripts-->
     <script src="js/scrollReveal.js"></script>
     <script>
-            (function($) {
-            "use strict"
-                window.scrollReveal = new scrollReveal();
+        (function($) {
+        "use strict"
+            window.scrollReveal = new scrollReveal();
             })(jQuery);
     </script>
     
