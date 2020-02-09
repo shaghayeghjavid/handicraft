@@ -15,10 +15,12 @@ Route::get('/', function () {
     return view('index');
 });
 
-Route::get('/artist/{id}', 'artistController@showArtist')->name('artist');
+Route::get('/artist/{id}', 'artistController@showArtist');
 
 Route::get('/artists', 'artistController@showArtists')->name('artists');
 
-// Route::get('/artists',function(){
-//     return view('artists');
-// })->name('artists');
+Route::post('/artist/likePost', 'artistController@checkLikeStatus')->name('likePost');
+
+Route::post('/artist/unlikePost', 'artistController@checkunLikeStatus')->name('unlikePost');
+
+// Route::get('/userLogin', 'userController@login');

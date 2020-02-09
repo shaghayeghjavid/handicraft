@@ -58,7 +58,7 @@
                         <li><a data-scroll href="#team" class="int-collapse-menu">Team</a></li>
                         <li><a data-scroll href="#works" class="int-collapse-menu">Portfolio</a></li>
                         <li><a data-scroll href="#contact" class="int-collapse-menu">Contact</a></li>
-                        <li><a href="artists.html">Artists</a></li>
+                        <li><a href="{{route('artists')}}">Artists</a></li>
                         </ul>
                     </div>
                 </div>
@@ -85,8 +85,10 @@
                         <th style="width:50%;">
                             <select onchange="select_state()" class="js-example-basic-single" name="state">
                                 <option value="All">all Art</option>
-                                <option  value="carpentery">carpentery</option>   
+                                <option  value="carpenter">carpentery</option>   
                                 <option value="painter">painter</option>
+                                <option value="macrame">macrame</option>
+                                <option value="other">other</option>
                             </select>
                         </th>
                     </tr>
@@ -119,49 +121,46 @@
     {{-- search artist by name --}}
     <script>
         function myFunction() {
-          // Declare variables
-          var input, filter, table, tr, td, i, txtValue;
-          input = document.getElementById("myInput");
-          filter = input.value.toUpperCase();
-          table = document.getElementById("myTable");
-          tr = table.getElementsByTagName("tr");
+            // Declare variables
+            var input, filter, table, tr, td, i, txtValue,txtValue2;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("myTable");
+            tr = table.getElementsByTagName("tr");
         
-          // Loop through all table rows, and hide those who don't match the search query
-          for (i = 0; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName("td")[1];
-            if (td) {
-              txtValue = td.textContent || td.innerText;
-              if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                tr[i].style.display = "";
-              } else {
-                tr[i].style.display = "none";
-              }
+            // Loop through all table rows, and hide those who don't match the search query
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[1];
+                tdd = tr[i].getElementsByTagName("td")[2];
+                if (td || tdd) {
+                    txtValue = td.textContent || td.innerText;
+                    txtValuee = tdd.textContent || tdd.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1 || txtValuee.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
             }
-          }
         }
-
-
         function select_state() {
-          var input, filter, table, tr, td, i, txtValue;
-          //input = document.getElementById("myInput");
-          filter = $(".js-example-basic-single").val().toUpperCase();
-          console.log(filter)
-          table = document.getElementById("myTable");
-          tr = table.getElementsByTagName("tr");
-        
-          // Loop through all table rows, and hide those who don't match the search query
-          for (i = 0; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName("td")[2];
-            if (td) {
-              txtValue = td.textContent || td.innerText;
-              if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                tr[i].style.display = "";
-              } else {
-                tr[i].style.display = "none";
-              }
+            var  filter, table, tr, td, i, txtValue;
+            filter = $(".js-example-basic-single").val().toUpperCase();
+            table = document.getElementById("myTable");
+            tr = table.getElementsByTagName("tr");
+            
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[2];
+                if (td) {
+                    txtValue = td.textContent;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1 || filter == "ALL") { 
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
             }
-          }
-        }
+        } 
     </script>
 
     
@@ -182,7 +181,6 @@
     <script src="../js/select2.js"></script>
     <script>
         $('.js-example-basic-single').select2({
-
         });
     </script>
     {{-- search in list --}}
@@ -247,68 +245,64 @@
                 };
             isotope();
             $(window).smartresize(isotope);
-
-
             $(".clickable-row").click(function() {
                 window.location = $(this).data("href");
             });
-
-
             }(jQuery));
-        </script>
+    </script>
 
-        <!-- SLIDER REVOLUTION 4.x SCRIPTS  -->
-        <script type="text/javascript" src="../js/jquery.themepunch.plugins.min.js"></script>
-        <script type="text/javascript" src="../js/jquery.themepunch.revolution.min.js"></script>
-        
-
-        <script type="text/javascript">
-            var revapi;
-            jQuery(document).ready(function() {
-            revapi = jQuery('.tp-banner').revolution(
-            {
-                delay:9000,
-                startwidth:1170,
-                startheight:500,
-                hideThumbs:10,
-                fullWidth:"off",
-                fullScreen:"on",
-                fullScreenOffsetContainer: ""
-            });
-        });	//ready
-        </script>
-        
-        
+    <!-- SLIDER REVOLUTION 4.x SCRIPTS  -->
+    <script type="text/javascript" src="../js/jquery.themepunch.plugins.min.js"></script>
+    <script type="text/javascript" src="../js/jquery.themepunch.revolution.min.js"></script>
     
-        <!-- Animation Scripts-->
-        <script src="../js/scrollReveal.js"></script>
-        <script>
-                (function($) {
-                "use strict"
-                    window.scrollReveal = new scrollReveal();
-                })(jQuery);
-        </script>
-        
-        <!-- Portofolio Pretty photo JS -->       
-        <script src="../js/jquery.prettyPhoto.js"></script>
-        <script type="text/javascript">
-            (function($) {
-                "use strict";
-                jQuery('a[data-gal]').each(function() {
-                    jQuery(this).attr('rel', jQuery(this).data('gal'));
-                });  	
-                    jQuery("a[data-gal^='prettyPhoto']").prettyPhoto({animationSpeed:'slow',slideshow:false,overlay_gallery: false,theme:'light_square',social_tools:false,deeplinking:false});
-            })(jQuery);
-        </script>
-            
-        <!-- Video Player o-->
-        <script src="../js/jquery.mb.YTPlayer.js"></script>    
-        <script type="text/javascript">
+
+    <script type="text/javascript">
+        var revapi;
+        jQuery(document).ready(function() {
+        revapi = jQuery('.tp-banner').revolution(
+        {
+            delay:9000,
+            startwidth:1170,
+            startheight:500,
+            hideThumbs:10,
+            fullWidth:"off",
+            fullScreen:"on",
+            fullScreenOffsetContainer: ""
+        });
+    });	//ready
+    </script>
+    
+    
+
+    <!-- Animation Scripts-->
+    <script src="../js/scrollReveal.js"></script>
+    <script>
             (function($) {
             "use strict"
-            $(".player").mb_YTPlayer();
-            })(jQuery);	
-        </script>
+                window.scrollReveal = new scrollReveal();
+            })(jQuery);
+    </script>
+    
+    <!-- Portofolio Pretty photo JS -->       
+    <script src="../js/jquery.prettyPhoto.js"></script>
+    <script type="text/javascript">
+        (function($) {
+            "use strict";
+            jQuery('a[data-gal]').each(function() {
+                jQuery(this).attr('rel', jQuery(this).data('gal'));
+            });  	
+                jQuery("a[data-gal^='prettyPhoto']").prettyPhoto({animationSpeed:'slow',slideshow:false,overlay_gallery: false,theme:'light_square',social_tools:false,deeplinking:false});
+        })(jQuery);
+    </script>
+        
+    <!-- Video Player o-->
+    <script src="../js/jquery.mb.YTPlayer.js"></script>    
+    <script type="text/javascript">
+        (function($) {
+        "use strict"
+        $(".player").mb_YTPlayer();
+        })(jQuery);	
+    </script>
     
 </body>
 </html>

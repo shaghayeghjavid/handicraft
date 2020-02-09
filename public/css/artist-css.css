@@ -7,8 +7,8 @@
 .color-333{
     background-color: #333;	
 }
-.margin-top-108{
-    margin-top: 108px;
+.margin-top-44{
+    margin-top: 44px;
 }
 .artist-image-list{
     vertical-align: middle;
@@ -59,4 +59,20 @@
 }
 .select2-selection__rendered{
     color: #666 !important;
+}
+.plus-icon-css{
+    position: relative !important;
+    left: 175px !important;
+    top: 150px !important;
+}
+
+.discount-css{
+    position: relative;
+    float: right;
+}
+.like-css{
+    position: relative;
+    left: 169px;
+    top: 105px;
+    color:red;
 }

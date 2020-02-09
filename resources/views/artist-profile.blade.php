@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <title>ATLAS ARTIST</title>
     
@@ -31,9 +32,8 @@
     <link rel="stylesheet" href="../css/artist-css.css">
 </head>
 <body data-spy="scroll" data-offset="25">
-    <!-- <div class="animationload"><div class="loader">Loading...</div></div> End Preloader -->
-    
     <!--/HEADER SECTION -->
+
     <header class="header">
         <div class="container">
             <div class="navbar navbar-default" role="navigation">
@@ -57,15 +57,17 @@
                         <li><a data-scroll href="#team" class="int-collapse-menu">Team</a></li>
                         <li><a data-scroll href="#works" class="int-collapse-menu">Portfolio</a></li>
                         <li><a data-scroll href="#contact" class="int-collapse-menu">Contact</a></li>
-                        <li><a href="artists.html">Artists</a></li>
+                        <li><a href="{{route('artists')}}">Artists</a></li>
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
     </header>
-
-    
+    <?php
+    // $artist=$arr_view_data['var3'];
+    // dd($likes);
+    ?>
     <!-- ARTIST LIST SECTION -->    
     <section id="works" class="dark-wrapper color-333">
         <div class="container">
@@ -76,35 +78,43 @@
             </div>
                 
             <div class="norow">
-                {{-- <div>
-                    <img src="../demos/work_01.jpg" alt="" class="artist-image-profile">
-                    <h1>Philipp Webber</h1>
-                    <h3>painter</h3>
-                    <h4>Artist.Figurative oil painter.Obsessed with trying to capture the reality behind the facade.</h4>
-                </div> --}}
-                {{-- @foreach ($artists as $artist) --}}
                 <div>
                     <img src="data:image/png;base64,{{ chunk_split(base64_encode($artist->picture)) }}" alt="" class="artist-image-profile" >
                     <h1>{{ $artist->name }}</h1>
-                    <h3>{{ $artist->art }}</h3>
+                    {{-- <h3>{{ $artist->art }}</h3> --}}
                     <h4>{{ $artist->bio }}</h4>
                 </div>
-                {{-- @endforeach --}}
+                
                 <div class="margin-top-108 masonry_wrapper" data-scroll-reveal="enter from the bottom after 0.5s">
                     @foreach ($posts as $post)
-                    <div class="item entry item-h2 photography print">
-                        <img src="data:image/png;base64,{{ chunk_split(base64_encode($post->post)) }}" alt="" class="img-responsive">
-                            <div class="hovereffect">
-                                <a data-gal="prettyPhoto[product-gallery]" rel="bookmark" href="data:image/png;base64,{{ chunk_split(base64_encode($post->post)) }}"><span class="icon"><i class="fa fa-plus"></i></span></a>
-                                <div class="buttons">
-                                    <h4>Portfolio Work</h4>
-                                    <h5>WEB DESIGN, LOGO, PRINT, VIDEO</h5>
-                                </div><!-- end buttons -->
-                            </div><!-- end hovereffect -->
-                    </div>  
-                    @endforeach                                                       
+                        <div class="item entry item-h2 photography print">
+                            <img src="data:image/png;base64,{{ chunk_split(base64_encode($post->post)) }}" alt="" class="img-responsive">
+                                <div class="hovereffect">
+                                    <a data-gal="prettyPhoto[product-gallery]" rel="bookmark" href="data:image/png;base64,{{ chunk_split(base64_encode($post->post)) }}"><span class="icon plus-icon-css"><i class="fa fa-plus"></i></span></a>
+                                    <div class="discount-css">
+                                        @if ( $post->discount == 1)
+                                            <h5>با تخفیف</h5>
+                                        @endif
+                                    </div>
+                                    <div class="buttons">
+                                        <h4>price : {{$post->price}}</h4> 
+                                        <div>
+                                            @foreach ($likes as $like)
+                                                @if (  ($like->postID) == ($post->id) && (($like->artistID)==($post->artistID)) ) 
+                                                    @if(($like->liked)==0) 
+                                                        <span class="like-css like" artistID="{{$like->artistID}}" postID="{{$post->id}}"><i class="fa fa-heart-o"></i></span>
+                                                        @else 
+                                                        <span  class="like-css unlike" artistID="{{$like->artistID}}" postID="{{$post->id}}"><i class="fa fa-heart"></i></span>
+                                                    @endif 
+                                               @endif
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                    @endforeach                                                      
                 </div>
-            </div>      
+            </div>
         </div>     
     </section>
 
@@ -135,121 +145,148 @@
     <script src="../js/custom.js"></script>
     <script src="../js/jquery.unveilEffects.js"></script>
     <script src="../js/jquery.isotope.min.js"></script>
-    <script>
+    
+    <script type="text/javascript">
         (function ($) {
             var $container = $('.masonry_wrapper'),
-                colWidth = function () {
-                    var w = $container.width(), 
-                        columnNum = 1,
-                        columnWidth = 0;
-                    if (w > 1200) {
-                        columnNum  = 3;
-                    } else if (w > 900) {
-                        columnNum  = 3;
-                    } else if (w > 600) {
-                        columnNum  = 2;
-                    } else if (w > 300) {
-                        columnNum  = 1;
-                    }
-                    columnWidth = Math.floor(w/columnNum);
-                    $container.find('.item').each(function() {
-                        var $item = $(this),
-                            multiplier_w = $item.attr('class').match(/item-w(\d)/),
-                            multiplier_h = $item.attr('class').match(/item-h(\d)/),
-                            width = multiplier_w ? columnWidth*multiplier_w[1]-4 : columnWidth-4,
-                            height = multiplier_h ? columnWidth*multiplier_h[1]*0.5-4 : columnWidth*0.5-4;
-                        $item.css({
-                            width: width,
-                            height: height
-                        });
+            colWidth = function () {
+                var w = $container.width(), 
+                    columnNum = 1,
+                    columnWidth = 0;
+                if (w > 1200) {
+                    columnNum  = 3;
+                } else if (w > 900) {
+                    columnNum  = 3;
+                } else if (w > 600) {
+                    columnNum  = 2;
+                } else if (w > 300) {
+                    columnNum  = 1;
+                }
+                columnWidth = Math.floor(w/columnNum);
+                $container.find('.item').each(function() {
+                    var $item = $(this),
+                        multiplier_w = $item.attr('class').match(/item-w(\d)/),
+                        multiplier_h = $item.attr('class').match(/item-h(\d)/),
+                        width = multiplier_w ? columnWidth*multiplier_w[1]-4 : columnWidth-4,
+                        height = multiplier_h ? columnWidth*multiplier_h[1]*0.5-4 : columnWidth*0.5-4;
+                    $item.css({
+                        width: width,
+                        height: height
                     });
-                    return columnWidth;
-                }
-                            
-                function refreshWaypoints() {
-                    setTimeout(function() {
-                    }, 1000);   
-                }
-                            
-                $('nav.portfolio-filter ul li a').on('click', function() {
-                    var selector = $(this).attr('data-filter');
-                    $container.isotope({ filter: selector }, refreshWaypoints());
-                    $('nav.portfolio-filter ul li a').removeClass('active');
-                    $(this).addClass('active');
-                    return false;
                 });
-                    
-                function setPortfolio() { 
-                    setColumns();
-                    $container.isotope('reLayout');
-                }
-        
-                isotope = function () {
-                    $container.isotope({
-                        resizable: true,
-                        itemSelector: '.item',
-                        masonry: {
-                            columnWidth: colWidth(),
-                            gutterWidth: 0
-                        }
-                    });
-                };
+                return columnWidth;
+            }
+                        
+            function refreshWaypoints() {
+                setTimeout(function() {
+                }, 1000);   
+            }
+                        
+            $('nav.portfolio-filter ul li a').on('click', function() {
+                var selector = $(this).attr('data-filter');
+                $container.isotope({ filter: selector }, refreshWaypoints());
+                $('nav.portfolio-filter ul li a').removeClass('active');
+                $(this).addClass('active');
+                return false;
+            });
+                
+            function setPortfolio() { 
+                setColumns();
+                $container.isotope('reLayout');
+            }
+    
+            isotope = function () {
+                $container.isotope({
+                    resizable: true,
+                    itemSelector: '.item',
+                    masonry: {
+                        columnWidth: colWidth(),
+                        gutterWidth: 0
+                    }
+                });
+            };
             isotope();
             $(window).smartresize(isotope);
-            }(jQuery));
-        </script>
-
-        <!-- SLIDER REVOLUTION 4.x SCRIPTS  -->
-        <script type="text/javascript" src="../js/jquery.themepunch.plugins.min.js"></script>
-        <script type="text/javascript" src="../js/jquery.themepunch.revolution.min.js"></script>
-        
-        <script type="text/javascript">
-            var revapi;
-            jQuery(document).ready(function() {
-            revapi = jQuery('.tp-banner').revolution(
+        }(jQuery));
+        //like post
+        $('.like').click(function(){
+            $artistId = $(this).attr("artistID");
+            $countpost = $(this).attr("postID");
+            $.post("{{route('likePost')}}",
             {
-                delay:9000,
-                startwidth:1170,
-                startheight:500,
-                hideThumbs:10,
-                fullWidth:"off",
-                fullScreen:"on",
-                fullScreenOffsetContainer: ""
-            });
-        });	//ready
-        </script>
-        
-        
+                '_token': '{{csrf_token()}}',
+                'liked': 1,
+                'aID':$artistId,
+                'pID':$countpost,
+                
+            })
+            .done(function() {
+                alert( "success" );
+            })
+            .fail(function() {
+                alert( "error" );
+            })
+        });
+        //unlike post
+        $('.unlike').click(function(){
+            $artistId = $(this).attr("artistID");
+            $countpost = $(this).attr("postID");
+            $.post("{{route('unlikePost')}}",
+            {
+                '_token': '{{csrf_token()}}',
+                'liked': 0,
+                'aID':$artistId,
+                'pID':$countpost,
+                
+            })
+            .done(function() {
+                alert( "success" );
+            })
+            .fail(function() {
+                alert( "error" );
+            })
+        });
+    </script>
+    <!-- SLIDER REVOLUTION 4.x SCRIPTS  -->
+    <script type="text/javascript" src="../js/jquery.themepunch.plugins.min.js"></script>
+    <script type="text/javascript" src="../js/jquery.themepunch.revolution.min.js"></script>
     
-        <!-- Animation Scripts-->
-        <script src="../js/scrollReveal.js"></script>
-        <script>
-                (function($) {
-                "use strict"
-                    window.scrollReveal = new scrollReveal();
-                })(jQuery);
-        </script>
-        
-        <!-- Portofolio Pretty photo JS -->       
-        <script src="../js/jquery.prettyPhoto.js"></script>
-        <script type="text/javascript">
-            (function($) {
-                "use strict";
-                jQuery('a[data-gal]').each(function() {
-                    jQuery(this).attr('rel', jQuery(this).data('gal'));
-                });  	
-                    jQuery("a[data-gal^='prettyPhoto']").prettyPhoto({animationSpeed:'slow',slideshow:false,overlay_gallery: false,theme:'light_square',social_tools:false,deeplinking:false});
-            })(jQuery);
-        </script>
-            
-        <!-- Video Player o-->
-        <script src="../js/jquery.mb.YTPlayer.js"></script>    
-        <script type="text/javascript">
+    <script type="text/javascript">
+        var revapi;
+        jQuery(document).ready(function() {
+        revapi = jQuery('.tp-banner').revolution(
+        {
+            delay:9000,
+            startwidth:1170,
+            startheight:500,
+            hideThumbs:10,
+            fullWidth:"off",
+            fullScreen:"on",
+            fullScreenOffsetContainer: ""
+        });
+    });	//ready
+    </script>
+    
+    <!-- Animation Scripts-->
+    <script src="../js/scrollReveal.js"></script>
+    <script>
             (function($) {
             "use strict"
-            $(".player").mb_YTPlayer();
-            })(jQuery);	
-        </script>
+                window.scrollReveal = new scrollReveal();
+            })(jQuery);
+    </script>
+    
+    <!-- Portofolio Pretty photo JS -->       
+    <script src="../js/jquery.prettyPhoto.js"></script>
+    <script type="text/javascript">
+        (function($) {
+            "use strict";
+            jQuery('a[data-gal]').each(function() {
+                jQuery(this).attr('rel', jQuery(this).data('gal'));
+            });  	
+                jQuery("a[data-gal^='prettyPhoto']").prettyPhoto({animationSpeed:'slow',slideshow:false,overlay_gallery: false,theme:'light_square',social_tools:false,deeplinking:false});
+        })(jQuery);
+    </script>
     
 </body>
 </html>

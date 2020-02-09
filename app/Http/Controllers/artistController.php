@@ -11,16 +11,29 @@ class artistController extends Controller
        
         return view('artist-profile');
           
-}
+    }
     public function showArtist($id)
     {
         $artist = DB::select('select * from artists where id = ?', [$id]);
         $posts = DB::select('select * from posts where artistID = ?', [$id]);
-        return view('artist-profile', ['artist' => $artist[0]],['posts' => $posts]);
+        $likes = DB::select('select * from likes where artistID = ?', [$id]);
+        return View('artist-profile')->with('artist', $artist[0])
+                                 ->with('posts', $posts)
+                                 ->with('likes', $likes);
     }
 
     public function showArtists(){
         $artists = DB::select('select * from artists');
         return view('artists',['artists' => $artists]);
+    }
+    public function checkLikeStatus(){
+        $artistID = $_POST['aID'];
+        $postID = $_POST['pID'];
+        DB::update('update likes set liked=1 where artistID="'.$artistID.'" and postID="'.$postID.'";');
+    }
+    public function checkunLikeStatus(){
+        $artistID = $_POST['aID'];
+        $postID = $_POST['pID'];
+        DB::update('update likes set liked=0 where artistID="'.$artistID.'" and postID="'.$postID.'";');
     }
 }
