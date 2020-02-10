@@ -7,7 +7,7 @@
     <meta name="author" content="">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
-    <title>ATLAS ARTIST</title>
+    <title>ATLAS Favourite</title>
     
     <!-- Bootstrap -->
     <link rel="stylesheet" href="../css/bootstrap.css">
@@ -32,20 +32,13 @@
     <link rel="stylesheet" href="../css/artist-css.css">
 </head>
 <body data-spy="scroll" data-offset="25">
-    <!--/HEADER SECTION -->
-
+    <!-- HEADER SECTION -->
     <header class="header">
         <div class="container">
             <div class="navbar navbar-default" role="navigation">
                 <div class="container-fluid">
                     <div class="navbar-header">
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        </button>
-                        <a href="index.html" class="navbar-brand">ATLAS</a>
+                       <a href="index.html" class="navbar-brand">ATLAS</a>
                     </div>
                     <div class="navbar-collapse collapse">
                         <ul class="nav navbar-nav navbar-right">
@@ -64,58 +57,42 @@
             </div>
         </div>
     </header>
-    <?php
-    // $artist=$arr_view_data['var3'];
-    // dd($likes);
-    ?>
-    <!-- ARTIST LIST SECTION -->    
+    <!-- LIKED POSTS SECTION -->    
     <section id="works" class="dark-wrapper color-333">
         <div class="container">
             <div class="title text-center">
                 <h2>this is ATLAS</h2>
-                <h3>Art is here</h3>
+                <h3>Dear {{ $user->name }}! your Favourite is here</h3>
                 <hr>
             </div>
                 
             <div class="norow">
-                <div>
-                    <img src="data:image/png;base64,{{ chunk_split(base64_encode($artist->picture)) }}" alt="" class="artist-image-profile" >
-                    <h1>{{ $artist->name }}</h1>
-                    {{-- <h3>{{ $artist->art }}</h3> --}}
-                    <h4>{{ $artist->bio }}</h4>
-                </div>
-                
                 <div class="margin-top-108 masonry_wrapper" data-scroll-reveal="enter from the bottom after 0.5s">
-                    @foreach ($posts as $post)
-                        <div class="item entry item-h2 photography print">
-                            <img src="data:image/png;base64,{{ chunk_split(base64_encode($post->post)) }}" alt="" class="img-responsive">
-                                <div class="hovereffect">
-                                    <a data-gal="prettyPhoto[product-gallery]" rel="bookmark" href="data:image/png;base64,{{ chunk_split(base64_encode($post->post)) }}"><span class="icon plus-icon-css"><i class="fa fa-plus"></i></span></a>
-                                    <div class="discount-css">
-                                        @if ( $post->discount == 1)
-                                            <h5>با تخفیف</h5>
-                                        @endif
-                                    </div>
-                                    <div class="buttons">
-                                        <h4>price : {{$post->price}}</h4> 
-                                        <div>
-                                            <?php $hasLike = 0 ?> 
-                                            @foreach ($likes as $like)
-                                                @if (  ($like->postID) == ($post->id) && (($like->artistID)==($post->artistID))&& (($like->liked)==1) ) 
-                                                    <?php $hasLike = 1 ?> 
-                                               @endif
-                                            @endforeach
-                                            @if($hasLike == 0)
-                                                <span class="like-css like" artistID="{{$post->artistID}}" postID="{{$post->id}}"><i class="fa fa-heart-o"></i></span>
-                                            @else 
-                                                <span  class="like-css unlike" artistID="{{$post->artistID}}" postID="{{$post->id}}"><i class="fa fa-heart"></i></span>
-                                            @endif 
-
+                    @foreach($likes as $like)
+                        @if(($like->liked)==1)
+                            @foreach ($posts as $post)
+                                @if ( (($like->artistID)==($post->artistID)) && ($like->postID) == ($post->id) ) 
+                                    <div class="item entry item-h2 photography print">
+                                        <img src="data:image/png;base64,{{ chunk_split(base64_encode($post->post)) }}" alt="" class="img-responsive">
+                                        <div data-href="{{ url('artist',$post->artistID) }}" class="hovereffect clickable-row">
+                                            <a data-gal="prettyPhoto[product-gallery]" rel="bookmark" href="data:image/png;base64,{{ chunk_split(base64_encode($post->post)) }}"><span class="icon plus-icon-css"><i class="fa fa-plus"></i></span></a>
+                                            <div class="discount-css">
+                                                @if ( $post->discount == 1)
+                                                    <h5>با تخفیف</h5>
+                                                @endif
+                                            </div>
+                                            <div class="buttons">
+                                                <h4>price : {{$post->price}}</h4> 
+                                                <div>
+                                                    <span class="like-css like" artistID="{{$like->artistID}}" postID="{{$post->id}}"><i class="fa fa-heart"></i></span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                        </div>
-                    @endforeach                                                      
+                                @endif
+                            @endforeach 
+                        @endif
+                    @endforeach                                                     
                 </div>
             </div>
         </div>     
@@ -210,45 +187,11 @@
             };
             isotope();
             $(window).smartresize(isotope);
-        }(jQuery));
-        //like post
-        $('.like').click(function(){
-            $artistId = $(this).attr("artistID");
-            $countpost = $(this).attr("postID");
-            $.post("{{route('likePost')}}",
-            {
-                '_token': '{{csrf_token()}}',
-                'liked': 1,
-                'aID':$artistId,
-                'pID':$countpost,
-                
-            })
-            .done(function() {
-                alert( "success" );
-            })
-            .fail(function() {
-                alert( "error" );
-            })
-        });
-        //unlike post
-        $('.unlike').click(function(){
-            $artistId = $(this).attr("artistID");
-            $countpost = $(this).attr("postID");
-            $.post("{{route('unlikePost')}}",
-            {
-                '_token': '{{csrf_token()}}',
-                'liked': 0,
-                'aID':$artistId,
-                'pID':$countpost,
-                
-            })
-            .done(function() {
-                alert( "success" );
-            })
-            .fail(function() {
-                alert( "error" );
-            })
-        });
+        }(jQuery)); 
+        //go to artist page
+        $(".clickable-row").click(function() {
+                window.location = $(this).data("href");
+            });
     </script>
     <!-- SLIDER REVOLUTION 4.x SCRIPTS  -->
     <script type="text/javascript" src="../js/jquery.themepunch.plugins.min.js"></script>
@@ -292,4 +235,4 @@
     </script>
     
 </body>
-</html>
+</html

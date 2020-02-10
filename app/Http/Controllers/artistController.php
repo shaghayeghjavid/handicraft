@@ -29,11 +29,11 @@ class artistController extends Controller
     public function checkLikeStatus(){
         $artistID = $_POST['aID'];
         $postID = $_POST['pID'];
-        DB::update('update likes set liked=1 where artistID="'.$artistID.'" and postID="'.$postID.'";');
+        DB::insert("INSERT INTO `likes` (`liked`,`userID`,`artistID`,`postID`) VALUES ('1','1',".$artistID.",".$postID."); ");
     }
     public function checkunLikeStatus(){
         $artistID = $_POST['aID'];
         $postID = $_POST['pID'];
-        DB::update('update likes set liked=0 where artistID="'.$artistID.'" and postID="'.$postID.'";');
+        DB::update('DELETE FROM likes WHERE artistID="'.$artistID.'" and postID="'.$postID.'";');
     }
 }

@@ -245,7 +245,7 @@
                 };
             isotope();
             $(window).smartresize(isotope);
-            $(".clickable-row").click(function() {
+            $(".clickable-row").click(function() { 
                 window.location = $(this).data("href");
             });
             }(jQuery));

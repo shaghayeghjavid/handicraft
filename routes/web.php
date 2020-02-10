@@ -15,7 +15,7 @@ Route::get('/', function () {
     return view('index');
 });
 
-Route::get('/artist/{id}', 'artistController@showArtist');
+Route::get('/artist/{id}', 'artistController@showArtist')->name('artist');
 
 Route::get('/artists', 'artistController@showArtists')->name('artists');
 
@@ -23,4 +23,6 @@ Route::post('/artist/likePost', 'artistController@checkLikeStatus')->name('likeP
 
 Route::post('/artist/unlikePost', 'artistController@checkunLikeStatus')->name('unlikePost');
 
-// Route::get('/userLogin', 'userController@login');
+Route::get('/userLogin', 'userController@signin');
+Route::get('/userLogin', 'userController@signup');
+Route::get('/userLogin/{id}', 'userController@favourites');
