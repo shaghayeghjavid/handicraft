@@ -1121,7 +1121,7 @@
     <script type="text/javascript">
     (function($) {
         "use strict"
-        $(".player").mb_YTPlayer();
+          $(".player").mb_YTPlayer();
         })(jQuery);	
     </script>
     
